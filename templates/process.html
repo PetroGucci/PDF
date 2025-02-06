@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Procesando {{ filename }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Archivo: {{ filename }}</h1>
+        {% if file_type == 'pdf' %}
+            <h2>Acciones disponibles para PDF:</h2>
+            <form method="POST">
+                <button type="submit" name="action" value="extract_color">Extraer imágenes en color</button>
+                <button type="submit" name="action" value="extract_bw">Extraer imágenes en blanco y negro (Filtro escáner)</button>
+            </form>
+        {% elif file_type in ['png', 'jpg', 'jpeg'] %}
+            <h2>Acciones disponibles para imagen:</h2>
+            <form method="POST">
+                <button type="submit" name="action" value="edit_crop">Editar/Cortar imagen</button>
+                <button type="submit" name="action" value="scan_filter">Aplicar filtro escáner (Blanco y negro)</button>
+                <button type="submit" name="action" value="convert_pdf">Convertir imagen a PDF</button>
+            </form>
+        {% else %}
+            <p>Tipo de archivo no soportado.</p>
+        {% endif %}
+        <br>
+        <a href="{{ url_for('index') }}">Volver a subir otro archivo</a>
+    </div>
+</body>
+</html>
