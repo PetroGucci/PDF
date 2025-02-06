@@ -1,7 +1,7 @@
 import os
 import io
 import zipfile
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request, redirect, url_for, send_file, send_from_directory
 from werkzeug.utils import secure_filename
 from PIL import Image, ImageOps, ImageEnhance
 import fitz  # PyMuPDF
@@ -9,10 +9,11 @@ import fitz  # PyMuPDF
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
-# Crear la carpeta de uploads si no existe
+# Crea la carpeta uploads si no existe
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
+# Ruta principal con drag & drop
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
@@ -21,10 +22,10 @@ def index():
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-            # Redirecciona a la ruta de procesamiento
             return redirect(url_for('process_file', filename=filename))
     return render_template("index.html")
 
+# Ruta para procesar el archivo subido
 @app.route("/process/<filename>", methods=["GET", "POST"])
 def process_file(filename):
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -34,32 +35,28 @@ def process_file(filename):
     if request.method == "POST":
         action = request.form.get("action")
         
-        # Procesar PDF: extraer imágenes y devolver un ZIP
+        # Procesamiento para PDF: extraer imágenes y descargarlas en un ZIP
         if file_ext == "pdf":
             if action in ["extract_color", "extract_bw"]:
                 color = True if action == "extract_color" else False
                 images = extract_images(file_path, color=color)
                 if images:
-                    # Crear un ZIP con todas las imágenes
                     zip_io = io.BytesIO()
                     with zipfile.ZipFile(zip_io, mode="w", compression=zipfile.ZIP_DEFLATED) as zipf:
                         for idx, img in enumerate(images):
-                            # Convertir imagen a RGB (para JPEG) y guardarla en memoria
                             img = img.convert("RGB")
                             img_io = io.BytesIO()
-                            # Guardamos con calidad optimizada: buena calidad y peso reducido.
                             img.save(img_io, format="JPEG", quality=85, optimize=True)
                             img_io.seek(0)
                             zipf.writestr(f"extracted_{idx+1}.jpg", img_io.read())
                     zip_io.seek(0)
                     return send_file(zip_io, mimetype="application/zip", as_attachment=True, download_name="extracted_images.zip")
         
-        # Procesar imágenes (PNG, JPG, JPEG)
+        # Procesamiento para imágenes (PNG, JPG, JPEG)
         elif file_ext in ["png", "jpg", "jpeg"]:
             if action == "edit_crop":
-                image = Image.open(file_path)
-                cropped = crop_center(image)
-                return send_image(cropped, 'cropped.png')
+                # Redirecciona al editor para recorte manual
+                return redirect(url_for('editor', filename=filename))
             elif action == "scan_filter":
                 image = Image.open(file_path)
                 scanned = apply_scanner_filter(image)
@@ -73,11 +70,42 @@ def process_file(filename):
                                  as_attachment=True, download_name='converted.pdf')
     return render_template("process.html", **context)
 
+# Ruta del editor de recorte
+@app.route("/editor/<filename>", methods=["GET", "POST"])
+def editor(filename):
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    if request.method == "POST":
+        try:
+            x = float(request.form.get('x', 0))
+            y = float(request.form.get('y', 0))
+            width = float(request.form.get('width', 0))
+            height = float(request.form.get('height', 0))
+        except (ValueError, TypeError):
+            return "Error en los parámetros de recorte.", 400
+        
+        action = request.form.get('action')
+        image = Image.open(file_path)
+        cropped = image.crop((x, y, x + width, y + height))
+        
+        # Si se eligió aplicar el filtro escáner, se procesa el recorte
+        if action == 'crop_scan_pdf':
+            cropped = apply_scanner_filter(cropped)
+        
+        pdf_io = io.BytesIO()
+        cropped.convert("RGB").save(pdf_io, format="PDF")
+        pdf_io.seek(0)
+        download_name = 'cropped_scanned.pdf' if action == 'crop_scan_pdf' else 'cropped.pdf'
+        return send_file(pdf_io, mimetype='application/pdf', as_attachment=True, download_name=download_name)
+    
+    return render_template("editor.html", filename=filename)
+
+# Ruta para servir los archivos subidos
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+# Función para extraer imágenes de un PDF
 def extract_images(pdf_path, color=True):
-    """
-    Extrae las imágenes de cada página de un PDF.
-    Si color es False, las convierte a blanco y negro con filtro escáner.
-    """
     doc = fitz.open(pdf_path)
     images = []
     for page in doc:
@@ -92,28 +120,15 @@ def extract_images(pdf_path, color=True):
             images.append(image)
     return images
 
+# Filtro escáner: convierte a escala de grises y aumenta el contraste
 def apply_scanner_filter(image):
-    """
-    Simula un filtro escáner:
-      - Convierte a escala de grises.
-      - Aumenta el contraste para imitar el efecto de un escáner real.
-    """
     grayscale = ImageOps.grayscale(image)
     enhancer = ImageEnhance.Contrast(grayscale)
-    # Factor de 2.5: ajústalo según lo que necesites para lograr el efecto deseado.
     enhanced = enhancer.enhance(2.5)
     return enhanced
 
-def crop_center(image):
-    """Recorta la imagen al centro (cuadrado)."""
-    width, height = image.size
-    crop_size = min(width, height)
-    left = (width - crop_size) // 2
-    top = (height - crop_size) // 2
-    return image.crop((left, top, left + crop_size, top + crop_size))
-
+# Función para enviar una imagen para descarga
 def send_image(image, filename):
-    """Envía una imagen en memoria para su descarga."""
     img_io = io.BytesIO()
     image.save(img_io, 'PNG')
     img_io.seek(0)

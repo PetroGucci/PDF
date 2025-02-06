@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editor de Recorte para {{ filename }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Cropper.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Editor de Recorte para {{ filename }}</h1>
+        <div>
+            <!-- Se carga la imagen desde la carpeta uploads -->
+            <img id="image" src="{{ url_for('uploaded_file', filename=filename) }}" alt="Imagen para recortar" style="max-width:100%;">
+        </div>
+        <br>
+        <form id="crop-form" method="POST">
+            <input type="hidden" name="x" id="x">
+            <input type="hidden" name="y" id="y">
+            <input type="hidden" name="width" id="width">
+            <input type="hidden" name="height" id="height">
+            <!-- Los botones de acción -->
+            <button type="button" id="download-crop">Descargar PDF Recortado</button>
+            <button type="button" id="download-scan">Descargar PDF Escaneado (Recortado)</button>
+        </form>
+    </div>
+    <!-- Cropper.js JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script>
+        var image = document.getElementById('image');
+        var cropper = new Cropper(image, {
+            aspectRatio: NaN, // Recorte libre sin relación de aspecto fija
+            viewMode: 1
+        });
+
+        // Función que obtiene los datos del recorte y los envía al servidor
+        function submitForm(actionType) {
+            var data = cropper.getData(true);  // Obtiene los datos reales redondeados
+            document.getElementById('x').value = data.x;
+            document.getElementById('y').value = data.y;
+            document.getElementById('width').value = data.width;
+            document.getElementById('height').value = data.height;
+            var form = document.getElementById('crop-form');
+            var actionInput = document.getElementById('action_input');
+            if (!actionInput) {
+                actionInput = document.createElement('input');
+                actionInput.type = 'hidden';
+                actionInput.name = 'action';
+                actionInput.id = 'action_input';
+                form.appendChild(actionInput);
+            }
+            actionInput.value = actionType;
+            form.submit();
+        }
+
+        document.getElementById('download-crop').addEventListener('click', function() {
+            submitForm('crop_pdf');
+        });
+
+        document.getElementById('download-scan').addEventListener('click', function() {
+            submitForm('crop_scan_pdf');
+        });
+    </script>
+</body>
+</html>
