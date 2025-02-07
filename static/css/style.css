@@ -19,6 +19,13 @@ body {
 h1, h2 {
     color: #333;
 }
+.filename {
+    color: #0f78d1;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
 
 #drop-area {
     border: 2px dashed #ccc;
@@ -50,7 +57,17 @@ button {
 button:hover {
     background: #0f78d1;
 }
-
+#cancelEdit{
+    background-color: #dc3545; /* Rojo normal */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#cancelEdit:hover {
+    background-color: #c82333; /* Rojo más oscuro */
+}
 a {
     color: #1e90ff;
     text-decoration: none;

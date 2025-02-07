@@ -32,6 +32,6 @@ document.getElementById('download-scan').addEventListener('click', function() {
     submitForm('crop_scan_pdf');
 });
 // Botón de cancelar: redirige al inicio
-    document.getElementById('cancel').addEventListener('click', function() {
+    document.getElementById('cancelEdit').addEventListener('click', function() {
     window.location.href = "/";
 });

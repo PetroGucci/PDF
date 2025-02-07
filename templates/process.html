@@ -7,7 +7,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Archivo: {{ filename }}</h1>
+        <h1>PDF Tools</h1>
+        <p>Archivo cargado:</p>
+        <div class="filename">{{ filename }}</div></p>
         {% if file_type == 'pdf' %}
             <h2>Acciones disponibles para PDF:</h2>
             <form method="POST">
