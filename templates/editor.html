@@ -23,6 +23,7 @@
             <!-- Los botones de acción -->
             <button type="button" id="download-crop">Descargar PDF Recortado</button>
             <button type="button" id="download-scan">Descargar PDF Escaneado (Recortado)</button>
+            <button type="button" id="cancel">Cancelar</button>
         </form>
     </div>
     <!-- Cropper.js JS -->
@@ -61,6 +62,10 @@
         document.getElementById('download-scan').addEventListener('click', function() {
             submitForm('crop_scan_pdf');
         });
+        // Botón de cancelar: redirige al inicio
+            document.getElementById('cancel').addEventListener('click', function() {
+            window.location.href = "/";
+        });
     </script>
-</body>
+</body>  
 </html>
