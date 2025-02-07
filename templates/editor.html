@@ -9,7 +9,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Editor de Recorte para {{ filename }}</h1>
+        <h1>PDF Tools</h1>
+        <div class="filename">{{ filename }}</div>
         <div>
             <!-- Se carga la imagen desde la carpeta uploads -->
             <img id="image" src="{{ url_for('uploaded_file', filename=filename) }}" alt="Imagen para recortar" style="max-width:100%;">
@@ -23,7 +24,7 @@
             <!-- Los botones de acción -->
             <button type="button" id="download-crop">Descargar PDF Recortado</button>
             <button type="button" id="download-scan">Descargar PDF Escaneado (Recortado)</button>
-            <button type="button" id="cancel">Cancelar</button>
+            <button type="button" id="cancelEdit">Cancelar</button>
         </form>
     </div>
     <!-- Cropper.js JS -->
