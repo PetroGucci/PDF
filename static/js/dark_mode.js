@@ -1,44 +1,47 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const toggleDarkModeButton = document.getElementById("toggleDarkMode");
-  const themeStylesheet = document.getElementById("themeStylesheet");
+    const toggleDarkModeButton = document.getElementById("toggleDarkMode");
 
-  if (!toggleDarkModeButton || !themeStylesheet) {
-      console.error("Falta el botón o el <link> de estilos en el HTML.");
-      return;
-  }
+    if (!toggleDarkModeButton) {
+        console.error("Falta el botón en el HTML.");
+        return;
+    }
 
-  // Rutas de los estilos
-  const lightModeURL = "{{ url_for('static', filename='css/style.css') }}";
-  const darkModeURL = "{{ url_for('static', filename='css/dark_mode.css') }}";
+    // Aplicar el tema guardado en localStorage
+    if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+        toggleDarkModeButton.textContent = "☀️ Modo Claro";
+    } else {
+        document.body.classList.remove("dark-mode");
+        toggleDarkModeButton.textContent = "🌙 Modo Oscuro";
+    }
 
-  // Función para cambiar entre temas
-  function updateTheme() {
-      if (localStorage.getItem("darkMode") === "enabled") {
-          themeStylesheet.setAttribute("href", darkModeURL);
-          toggleDarkModeButton.textContent = "☀️ Modo Claro";
-      } else {
-          themeStylesheet.setAttribute("href", lightModeURL);
-          toggleDarkModeButton.textContent = "🌙 Modo Oscuro";
-      }
-  }
+    // Evento para alternar entre los temas
+    // toggleDarkModeButton.addEventListener("click", function () {
+    //     if (toggleDarkModeButton.classList.contains("light-mode")) {
+    //         toggleDarkModeButton.classList.remove("light-mode");
+    //         toggleDarkModeButton.classList.add("dark-mode")
+    //         localStorage.setItem("darkMode", "disabled");
+    //         toggleDarkModeButton.textContent = "🌙 Modo Oscuro";
+    //     } else {
+    //         toggleDarkModeButton.classList.remove("dark-mode");
+    //         toggleDarkModeButton.classList.add("light-mode")
+    //         localStorage.setItem("lightMode", "enabled");
+    //         toggleDarkModeButton.textContent = "☀️ Modo Claro";
+    //     }
+    // });
 
-  // Verificar si el usuario tenía activado el modo oscuro
-  if (localStorage.getItem("darkMode") === "enabled") {
-      themeStylesheet.setAttribute("href", darkModeURL);
-  } else {
-      themeStylesheet.setAttribute("href", lightModeURL);
-  }
 
-  updateTheme(); // Aplicar el tema al cargar la página
-
-  // Evento para alternar entre los temas
-  toggleDarkModeButton.addEventListener("click", function () {
-      if (localStorage.getItem("darkMode") === "enabled") {
-          localStorage.setItem("darkMode", "disabled");
-      } else {
-          localStorage.setItem("darkMode", "enabled");
-      }
-
-      updateTheme(); // Aplicar el cambio
-  });
+    toggleDarkModeButton.addEventListener("click", function () {
+        if (document.body.classList.contains("light-mode")) {
+            document.body.classList.remove("light-mode");
+            document.body.classList.add("dark-mode")
+            localStorage.setItem("darkMode", "disabled");
+            toggleDarkModeButton.textContent = "🌙 Modo Oscuro";
+        } else {
+            document.body.classList.remove("dark-mode");
+            document.body.classList.add("light-mode")
+            localStorage.setItem("lightMode", "enabled");
+            toggleDarkModeButton.textContent = "☀️ Modo Claro";
+        }
+    });
 });
