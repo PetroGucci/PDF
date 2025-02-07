@@ -19,6 +19,7 @@ ConverVs es una aplicación web que permite realizar diversas operaciones con ar
 - **HTML5**
 - **CSS3**
 - **JavaScript**
+- **Python**
 
 ## Contribución
 Las contribuciones son bienvenidas. Para colaborar, sigue estos pasos:

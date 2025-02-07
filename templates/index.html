@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <title>Sube tu archivo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark_mode.css') }}">
+
 </head>
 <body>
+    <button id="toggleDarkMode">🌙 Modo Oscuro</button>
     <div class="container">
         <h1>Arrastra y suelta tu archivo (PDF, PNG, JPG)</h1>
         <!-- Área de Drag & Drop -->
@@ -16,7 +19,7 @@
             </form>
         </div>
     </div>
-    
+    <script src="{{ url_for('static', filename='js/dark_mode.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
 </body>
 </html>
