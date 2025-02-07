@@ -1,35 +1,44 @@
 document.addEventListener("DOMContentLoaded", function () {
   const toggleDarkModeButton = document.getElementById("toggleDarkMode");
-  const body = document.body;
+  const themeStylesheet = document.getElementById("themeStylesheet");
 
-  //Funcion para actualizar el texto del boton
-  function updateButtonText() {
-    if (body.classList.contains("dark-mode")) {
-      toggleDarkModeButton.textContent = "☀️ Modo Claro";
-    }else{
-      toggleDarkModeButton.textContent = "🌙 Modo Oscuro";
-    }
+  if (!toggleDarkModeButton || !themeStylesheet) {
+      console.error("Falta el botón o el <link> de estilos en el HTML.");
+      return;
   }
 
-  // Verificar si el usuario tenía activado el modo oscuro antes
-  if (localStorage.getItem("darkMode") === "enabled") {
-      body.classList.add("dark-mode");
-  }
-  
-  // Actualizar el texto del botón al cargar la página
-  updateButtonText();
+  // Rutas de los estilos
+  const lightModeURL = "{{ url_for('static', filename='css/style.css') }}";
+  const darkModeURL = "{{ url_for('static', filename='css/dark_mode.css') }}";
 
-  toggleDarkModeButton.addEventListener("click", function () {
-      body.classList.toggle("dark-mode");
-
-      // Guardar la preferencia en localStorage
-      if (body.classList.contains("dark-mode")) {
-          localStorage.setItem("darkMode", "enabled");
+  // Función para cambiar entre temas
+  function updateTheme() {
+      if (localStorage.getItem("darkMode") === "enabled") {
+          themeStylesheet.setAttribute("href", darkModeURL);
+          toggleDarkModeButton.textContent = "☀️ Modo Claro";
       } else {
-          localStorage.setItem("darkMode", "disabled");
+          themeStylesheet.setAttribute("href", lightModeURL);
+          toggleDarkModeButton.textContent = "🌙 Modo Oscuro";
       }
-       
-      // Actualizar el texto del botón
-      updateButtonText();
+  }
+
+  // Verificar si el usuario tenía activado el modo oscuro
+  if (localStorage.getItem("darkMode") === "enabled") {
+      themeStylesheet.setAttribute("href", darkModeURL);
+  } else {
+      themeStylesheet.setAttribute("href", lightModeURL);
+  }
+
+  updateTheme(); // Aplicar el tema al cargar la página
+
+  // Evento para alternar entre los temas
+  toggleDarkModeButton.addEventListener("click", function () {
+      if (localStorage.getItem("darkMode") === "enabled") {
+          localStorage.setItem("darkMode", "disabled");
+      } else {
+          localStorage.setItem("darkMode", "enabled");
+      }
+
+      updateTheme(); // Aplicar el cambio
   });
 });
