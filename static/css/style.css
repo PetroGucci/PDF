@@ -89,12 +89,12 @@ a:hover {
 /*darkmode*/
 
 /* Posicion del boton */
-/* #toggleDarkMode {
+#toggleDarkMode {
     position: absolute;
     top: 10px;
     right: 15px;
     z-index: 999;
-  } */
+  }
   
   .dark-mode {
       font-family: Arial, sans-serif;
