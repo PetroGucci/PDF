@@ -9,7 +9,6 @@
 </head>
 <body>
     <button id="toggleDarkMode">🌙 Modo Oscuro</button>
-    <script src="{{ url_for('static', filename='js/dark_mode.js') }}" defer></script>
     <div class="container">
         <h1>PDF Tools</h1>
         <div class="filename">{{ filename }}</div>
@@ -32,5 +31,6 @@
     <!-- Cropper.js JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="{{ url_for('static', filename='js/editor.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/dark_mode.js') }}" defer></script>
 </body>  
 </html>
