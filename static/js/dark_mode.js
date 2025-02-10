@@ -2,13 +2,28 @@ document.addEventListener("DOMContentLoaded", function () {
     const darkModeButton = document.getElementById("toggleDarkMode");
     const body = document.body;
 
-    // Verificar si el usuario ya tiene activado el modo oscuro
-    if (localStorage.getItem("dark-mode") === "enabled") {
+    // Detectar el modo del sistema
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+    // Comprobar si el usuario ya tiene una preferencia guardada
+    let darkMode = localStorage.getItem("dark-mode");
+
+    if (darkMode === "enabled") {
         body.classList.add("dark-mode");
-        darkModeButton.textContent = "Modo Claro ☀️";
+    } else if (darkMode === "disabled") {
+        body.classList.remove("dark-mode");
+    } else {
+        // Si no hay preferencia guardada, aplicar la del sistema
+        if (prefersDarkScheme.matches) {
+            body.classList.add("dark-mode");
+            localStorage.setItem("dark-mode", "enabled");
+        }
     }
 
-    // Alternar modo oscuro al hacer clic en el botón
+    // Cambiar el texto del botón según el estado actual
+    darkModeButton.textContent = body.classList.contains("dark-mode") ? "Modo Claro ☀️" : "Modo Oscuro 🌙";
+
+    // Evento para cambiar el modo
     darkModeButton.addEventListener("click", function () {
         body.classList.toggle("dark-mode");
 

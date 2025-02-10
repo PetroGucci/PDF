@@ -7,10 +7,10 @@
 
     <link id="themeStylesheet" rel="stylesheet" href="../static/css/style.css">
 </head>
-<body class="light-mode">
-    <div class="container-full">
-
-        <button id="toggleDarkMode">🌙 Modo Oscuro</button>
+<body>
+    <button id="toggleDarkMode">🌙 Modo Oscuro</button>
+    <script src="{{ url_for('static', filename='js/dark_mode.js') }}" defer></script>
+    <!-- <div class="container-full"> -->
         <div class="container">
             <h1>PDF Tools</h1>
             <p>Convierte, edita y optimiza tus archivos PDF, PNG y JPG</p>

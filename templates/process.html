@@ -6,8 +6,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <button id="toggleDarkMode">🌙 Modo Oscuro</button>
+    <button id="toggleDarkMode">🌙 Modo Oscuro</button>
+    <script src="{{ url_for('static', filename='js/dark_mode.js') }}" defer></script>
+    <div class="container">        
         <h1>PDF Tools</h1>
         <p>Archivo cargado:</p>
         <div class="filename">{{ filename }}</div></p>
