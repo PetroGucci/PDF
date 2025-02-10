@@ -1,163 +1,82 @@
-
-
-Posicion del boton
-#toggleDarkMode {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    z-index: 999;}
-  
+/* === Estilos generales === */
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
     margin: 0;
     padding: 0;
-    text-align: center;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* === Contenedor Principal === */
 .container {
     width: 90%;
-    max-width: 55dvw;
-    margin: 3rem auto;
+    max-width: 600px;
+    margin: 50px auto;
     padding: 20px;
-    background: #fff;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-    border-radius: 8px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
-    color: #333;
-}
-.filename {
-    color: #0f78d1;
-    margin-block-start: 0.67em;
-    margin-block-end: 0.67em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-}
-
+/* === Área de arrastrar y soltar === */
 #drop-area {
-    border: 2px dashed #ccc;
-    border-radius: 8px;
+    border: 2px dashed #007BFF;
     padding: 30px;
-    background: #fafafa;
+    border-radius: 10px;
+    background: #eaf4ff;
     cursor: pointer;
-    transition: background 0.3s, border-color 0.3s;
-    margin-top: 20px;
+    transition: background 0.3s ease;
 }
 
 #drop-area.highlight {
-    background: #e9f5ff;
-    border-color: #1e90ff;
+    background: #d1e7ff;
 }
 
+#fileElem {
+    display: none;
+}
+
+/* === Botones === */
 button {
-    background: #1e90ff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    margin: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background 0.3s;
-}
-
-button:hover {
-    background: #0f78d1;
-}
-#cancelEdit{
-    background-color: #dc3545; /* Rojo normal */
+    background: #007BFF;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-}
-#cancelEdit:hover {
-    background-color: #c82333; /* Rojo más oscuro */
-}
-a {
-    color: #1e90ff;
-    text-decoration: none;
-    font-weight: bold;
+    margin-top: 10px;
+    transition: background 0.3s ease;
 }
 
-a:hover {
-    text-decoration: underline;
+button:hover {
+    background: #0056b3;
 }
-/*darkmode*/
 
-/* Posicion del boton */
-#toggleDarkMode {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    z-index: 999;
-  }
-  
-  .dark-mode {
-      font-family: Arial, sans-serif;
-      background-color: #202020;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      color: #ffffff;
-  }
-  
-  .dark-mode .container {
-      color: #ffffff;
-      width: 90%;
-      /* max-width: 600px; */
-      margin: 40px auto;
-      padding: 20px;
-      background: #202020;
-      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-      border-radius: 8px;
-      border: 2px solid #b961ec;
-  }
-  
-  .dark-mode h1, .dark-mode h2 {
-      color: #ffffff;
-  }
-  
-  .dark-mode #drop-area {
-      border: 2px dashed #b961ec;
-      border-radius: 8px;
-      padding: 30px;
-      background: #3a3a3a;
-      cursor: pointer;
-      transition: background 0.3s, border-color 0.3s;
-      margin-top: 20px;
-  }
-  
-  .dark-mode #drop-area.highlight {
-      background: #6c4a7c;
-      border-color: #b961ec;
-  }
-  
-  .dark-mode button {
-      background: #b961ec;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background 0.3s;
-  }
-  
-  .dark-mode #button:hover {
-      background: #0f78d1;
-  }
-  
-  .dark-mode #a {
-      color: #1e90ff;
-      text-decoration: none;
-      font-weight: bold;
-  }
-  
-  .dark-mode :hover {
-      text-decoration: underline;
-  }
+/* === Modo Oscuro === */
+.dark-mode {
+    background-color: #1e1e1e;
+    color: #f4f4f4;
+}
+
+.dark-mode .container {
+    background: #2b2b2b;
+}
+
+.dark-mode #drop-area {
+    background: #3a3a3a;
+    border-color: #ffa500;
+}
+
+.dark-mode #drop-area.highlight {
+    background: #555;
+}
+
+.dark-mode button {
+    background: #ffa500;
+}
+
+.dark-mode button:hover {
+    background: #cc8400;
+}
