@@ -86,3 +86,18 @@ button:hover {
 .dark-mode button:hover {
     background: #cc8400;
 }
+
+a {
+    color: rgb(0, 4, 255); /* Color normal del enlace */
+    text-decoration: none; /* Opcional: quita el subrayado */
+    transition: color 0.3s ease;
+}
+
+.dark-mode a {
+    color: rgb(82, 220, 255); /* Cambia el color al pasar el mouse */
+}
+
+a:hover {
+    color: rgb(0, 132, 255); /* Cambia el color al pasar el mouse */
+}
+
